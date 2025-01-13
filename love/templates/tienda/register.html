@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    {% load static %}
+    <link rel="stylesheet" href="/love/static/productos/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #ffe1f3;
+        }
+
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .side-message {
+            width: 220px;
+            font-size: 16px;
+            color: #b81d5b;
+            background-color: #fff6fb;
+            padding: 18px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            line-height: 1.6;
+            font-weight: bold;
+            border: 3px dashed #ffd1dc;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .side-message:hover {
+            transform: scale(1.1);
+            background-color: #ffe1f3;
+            border-color: #d16ba5;
+            color: #7a1e6b;
+        }
+
+        .form-container {
+            background: linear-gradient(145deg, #ffe1f3, #ffc1e3);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.8);
+            max-width: 350px;
+            text-align: center;
+            border: 3px solid #f76c91;
+        }
+
+        .form-container h1 {
+            font-size: 1.8em;
+            color: #b81d5b;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-container label {
+            font-size: 1em;
+            color: #b81d5b;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ffd1dc;
+            border-radius: 10px;
+            font-size: 1em;
+            background: #fff6fb;
+            color: #b81d5b;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container input:focus {
+            outline: none;
+            border-color: #f76c91;
+            box-shadow: 0 0 8px rgba(247, 108, 145, 0.5);
+        }
+
+        .form-container button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(145deg, #f76c91, #ff8fb3);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-container button[type="submit"]:hover {
+            background: linear-gradient(145deg, #ff8fb3, #f76c91);
+            transform: scale(1.05);
+        }
+
+        .form-container button[type="submit"]:active {
+            transform: scale(0.95);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .login-wrapper {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .side-message {
+                width: 100%;
+            }
+
+            .form-container {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <img src="/love/static/productos/images/inloveimag.png" alt="MakeUp Store Logo">
+    </div>
+    <nav>
+        <a href="{% url 'home' %}">INICIO</a>
+        <a href="{% url 'articulos' %}">PRODUCTOS</a>
+        <a href="{% url 'reseñas' %}">RESEÑAS</a>
+    </nav>
+    <div class="contact-info">
+        <a href="{% url 'login' %}" class="contact-button">Iniciar Sesión</a>
+        <a href="{% url 'register' %}" class="contact-button">Registrarse</a>
+    </div>
+    </header>
+
+<div class="login-wrapper">
+    <!-- Mensaje decorativo 1 a la izquierda -->
+    <div class="side-message left">
+        <p>✨ <strong>¡Resalta tu belleza!</strong> Con pequeños toques, haces magia. 💖</p>
+    </div>
+
+    <!-- Formulario de registro -->
+    <div class="form-container">
+        <h1>¡Crea tu cuenta!</h1>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <label for="username">Nombre de usuario:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            <label for="password2">Confirma tu contraseña:</label>
+            <input type="password" id="password2" name="password2" required>
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+
+    <!-- Mensaje decorativo 2 a la derecha -->
+    <div class="side-message right">
+        <p>💄 <strong>Un toque de color</strong> puede cambiar tu día. ¡Atrévete a brillar! 🌟</p>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>✨ ¡Estamos aquí para ayudarte a resaltar tu belleza! ✨</h3>
+            <p>📅 <strong>Lunes a Viernes:</strong> 9:00 AM - 7:00 PM<br>
+            🕒 <strong>Sábados:</strong> 10:00 AM - 2:00 PM<br>
+            🚪 <strong>Domingos y festivos:</strong> Cerrado, ¡nos vemos el lunes!</p>
+            <p class="beauty-quote">"La belleza comienza en el momento en que decides ser tú misma."</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3><img src="/love/static/productos/images/inloveimag.png" alt="Logo"></h3>
+            <div class="social-icons">
+                <a href="#"><img src="/love/static/productos/images/faceb.png" alt="Facebook"></a>
+                <a href="#"><img src="/love/static/productos/images/whats.png" alt="WhatsApp"></a>
+                <a href="#"><img src="/love/static/productos/images/insta.png" alt="Instagram"></a>
+            </div>
+        </div>
+        <div class="footer-section contact-us">
+            <h3>¿✨ Buscas lo mejor en maquillaje y belleza? ✨</h3>
+            <a href="./#" class="btn-contact">¡Descubre nuestros productos más vendidos!</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>💄 "La belleza es poder, y el maquillaje es su herramienta". © 2025 MakeUp Store 💄</p>
+        <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+    </div>
+</footer>
+</body>
+</html>

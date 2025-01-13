@@ -1,0 +1,531 @@
+/* General */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fef5f9;
+    color: #333;
+}
+
+/* Header inicial */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #ffafcc;
+    padding: 20px 100px; /* Espaciado inicial */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 80px;
+    border-bottom-right-radius: 80px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    height: 80px;
+    transition: all 0.3s ease-in-out; /* Transición suave */
+}
+
+/* Header reducido */
+header.shrink {
+    padding: 10px 70px; /* Reduce el padding */
+    height: 80px; /* Reduce la altura */
+    background-color: #ffafcc; /* Fondo más transparente */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Sombras más suaves */
+}
+
+/* Otros estilos existentes */
+/* Contenedor del logo */
+.logo {
+    position: relative; /* Para ajustar su posición */
+    margin-top: 30px; /* Baja el logo un poco */
+    text-align: center; /* Centra el logo horizontalmente */
+}
+
+/* Estilo del logo */
+.logo img {
+    width: 170px;
+    height: auto;
+    z-index: 2;
+    transition: transform 0.3s ease, width 0.3s ease; /* Transiciones suaves */
+    animation: bounce 2s infinite ease-in-out; /* Animación de movimiento */
+}
+
+/* Hover para ampliar y animar el logo */
+.logo img:hover {
+    transform: scale(1.1); /* Efecto de zoom al pasar el cursor */
+}
+
+/* Animación de rebote */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0); /* Posición inicial */
+    }
+    50% {
+        transform: translateY(-10px); /* Movimiento hacia arriba */
+    }
+}
+
+header.shrink .logo img {
+    width: 120px; /* Reduce el tamaño del logo */
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+}
+
+nav a {
+    text-decoration: none;
+    color: #ff80ab;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 30px;
+    border-radius: 25px;
+    background: linear-gradient(145deg, #fff1f8, #ffd6e4);
+    border: 2px solid #ff80ab;
+    box-shadow: 4px 4px 8px rgba(255, 128, 171, 0.2), -4px -4px 8px rgba(255, 255, 255, 0.8);
+    position: relative;
+    transition: all 0.4s ease-in-out;
+}
+
+nav a:hover {
+    background: linear-gradient(145deg, #ffcadc, #fff1f8);
+    color: #df83c0;
+    box-shadow: 4px 4px 15px rgba(255, 128, 171, 0.4), -4px -4px 10px rgba(255, 255, 255, 0.9);
+    transform: translateY(-3px) scale(1.1);
+}
+
+nav a:active {
+    background: #ff80ab;
+    color: #ffffff;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -2px -2px 5px rgba(255, 255, 255, 0.6);
+    transform: translateY(2px) scale(1.05);
+}
+
+
+/* Estilo de los botones en la sección de contacto */
+.contact-info a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 12px 30px;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #ffc0cb, #fda4b7); /* Tonos femeninos suaves */
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+    z-index: 1;
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4); /* Sombra sutil */
+}
+
+/* Efecto de brillo al fondo */
+.contact-info a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.6), transparent);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: scale(1.2);
+}
+
+/* Hover con un fondo brillante */
+.contact-info a:hover::before {
+    opacity: 1; /* Aparece el brillo */
+    transform: scale(1); /* Se centra en el botón */
+}
+
+.contact-info a:hover {
+    color: #ffffff;
+    border-color: #fda4b7; /* Borde brillante */
+    transform: translateY(-3px) scale(1.1); /* Efecto de aumento */
+    box-shadow: 0 8px 20px rgba(255, 182, 193, 0.5); /* Sombra más intensa */
+}
+
+.contact-info a:hover {
+    transform: translateY(-3px) scale(1.1); /* Aumenta un poco el tamaño */
+    box-shadow: 0 6px 20px rgba(255, 182, 193, 0.5); /* Sombra más intensa */
+    background: linear-gradient(135deg, #fda4b7, #ffc0cb); /* Cambia el degradado */
+    border-color: #ffd6e0; /* Borde claro al hacer hover */
+}
+
+
+/* Versión reducida del header */
+header.shrink {
+    padding: 10px 80px;
+    height: 80px;
+    border-bottom-left-radius: 80px;
+    border-bottom-right-radius: 80px;
+}
+
+header.shrink .logo img {
+    width: 140px;
+}
+
+
+/* Carrusel Manual Imágenes */
+.carousel {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 15px; /* Bordes redondeados */
+    background-color: #ffffff; /* Fondo claro */
+
+    /* Borde neón */
+    box-shadow: 
+        0 0 20px #b286cc,    /* Brillo mediano */
+        0 0 30px #b286cc,    /* Brillo intenso */
+        0 0 40px #b286cc,    /* Brillo extendido */
+        0 0 50px #b286cc,    /* Brillo más amplio */
+        inset 0 0 15px #b286cc; /* Brillo interno */
+    border: 2px solid #b286cc; /* Borde sólido del color base */
+    transition: box-shadow 0.3s ease; /* Transición para cambios suaves */
+}
+
+/* Efecto al pasar el cursor */
+.carousel:hover {
+    box-shadow: 
+        0 0 30px #9d69bb, /* Incrementa el brillo */
+        0 0 45px #9d69bb,
+        0 0 60px #9d69bb,
+        0 0 75px #9d69bb,
+        inset 0 0 20px #9d69bb; /* Brillo interno más fuerte */
+}
+
+.carousel-container {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-item {
+    min-width: 100%;
+    height: 300px; /* Ajusta el alto según tu necesidad */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.carousel-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 15px; /* Bordes redondeados para las imágenes */
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 30px;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+
+
+
+/* Sección con íconos dinámicos */
+.icon-section {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px; /* Reducido el espacio entre los íconos */
+    padding: 40px; /* Reducido el padding */
+    background-color: #fdfdff; /* Fondo claro y neutro */
+    border-radius: 15px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Caja de cada ícono */
+.icon-box {
+    width: 180px; /* Reducido el ancho */
+    background-color: #fff;
+    padding: 15px; /* Reducido el padding */
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    border: 2px solid #ff6b81; /* Borde rosa para contrastar */
+}
+
+.icon-box:hover {
+    transform: translateY(-10px); /* Efecto de elevación */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Sombra más fuerte */
+    background-color: #fce3ec; /* Fondo rosa claro al hacer hover */
+}
+
+/* Estilo del icono */
+.icon {
+    width: 50px; /* Reducido el tamaño del icono */
+    height: 50px; /* Reducido el tamaño del icono */
+    background-color: #ff6b81; /* Color rosa brillante */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px; /* Reducido el tamaño del texto */
+    color: white;
+    margin-bottom: 15px; /* Reducido el espacio inferior */
+    transition: background-color 0.3s ease;
+}
+
+/* Cambio de color del icono al hacer hover */
+.icon:hover {
+    background-color: #f76c91; /* Cambio a un rosa más claro */
+}
+
+/* Descripción de los iconos */
+.icon-description {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Estilo del texto */
+.icon-box p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Animación de entrada de los iconos */
+.icon-box {
+    animation: slideIn 0.6s ease-out forwards;
+}
+
+/* Animación para el efecto de deslizamiento */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+footer {
+    background-color: #ffafcc;
+    padding: 5px 0;
+    color: #000000;
+    font-family: 'Arial', sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    padding: 5px 20px;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 5px;
+}
+
+.footer-section h3 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: #000000;
+}
+
+.footer-section p {
+    font-size: 0.85em;
+    margin-bottom: 5px;
+    line-height: 1.3;
+}
+
+.footer-section img {
+    width: 165px;
+    margin-bottom: -10px;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    margin-top: -40px;
+}
+
+.social-icons a {
+    margin: 0 10px;
+    transition: transform 0.5s ease, filter 0.3s;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2) rotate(10deg);
+    filter: brightness(1.2);
+}
+
+.social-icons img {
+    width: 24px;
+    margin-top: 0px;
+}
+
+.beauty-quote {
+    font-style: italic;
+    font-size: 0.95em;
+    margin-top: 10px;
+    color: #a53a9c;
+}
+.form-container {
+    background: linear-gradient(145deg, #ffe1f3, #ffc1e3);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.8);
+    width: 90%;
+    max-width: 320px;
+    margin: 0 auto;
+    text-align: center;
+    border: 3px solid #f76c91;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.9);
+}
+
+.btn-contact {
+    display: inline-block;
+    background-color: #b286cc;
+    padding: 8px 15px;
+    border-radius: 20px;
+    color: #272626;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease-in-out, transform 0.3s;
+}
+
+.btn-contact:hover {
+    background-color: #943bc7;
+    transform: scale(1.1);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 10px;
+    border-top: 1px solid #fff;
+    padding-top: 10px;
+    font-size: 0.8em;
+}
+
+.footer-bottom p {
+    margin: 3px 0;
+}
+
+/* Animaciones adicionales */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Animación flotante en el logo */
+.footer-section img {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Animación de parpadeo en las patas */
+.paw-icon {
+    font-size: 30px;
+    color: lightgray;
+    cursor: pointer;
+}
+
+@keyframes paw-blink {
+    0% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+        /* Mensajes decorativos a los lados */
+        .side-message {
+            width: 220px;
+            font-size: 16px;
+            color: #b81d5b;
+            background-color: #fff6fb;
+            padding: 18px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            line-height: 1.6;
+            font-weight: bold;
+            border: 3px dashed #ffd1dc;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .side-message:hover {
+            transform: scale(1.1);
+            background-color: #ffe1f3;
+            border-color: #d16ba5;
+            color: #7a1e6b;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .login-wrapper {
+                flex-direction: column;
+            }
+
+            .side-message {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+
+            .form-container {
+                max-width: 300px;
+            }
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
