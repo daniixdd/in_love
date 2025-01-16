@@ -1,5 +1,3 @@
-
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -121,8 +119,10 @@ STATIC_URL = '/static/'
 
 # Si necesitas servir archivos estáticos durante el desarrollo (no recomendado en producción)
 STATICFILES_DIRS = [
-    BASE_DIR / "static",  # Esto asegura que Django busque en la carpeta 'static' dentro de tu directorio base
+    BASE_DIR / "static",  # Asegúrate de que esta carpeta exista
 ]
+LOGIN_REDIRECT_URL = '/profile/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 

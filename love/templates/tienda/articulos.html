@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Articulos</title>
+    <title>Artículos</title>
     {% load static %}
-    <link rel="stylesheet" href="/love/static/productos/css/style.css">
+    <link rel="stylesheet" href="{% static 'productos/css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -13,56 +13,177 @@
             margin: 0;
             padding: 0;
             background: #ffe1f3;
+
+            }
+            .articulos {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+        margin: 30px 20px;
+    }
+
+    .articulo {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+    }
+
+    .articulo:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .articulo-imagen img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+        transition: transform 0.4s ease;
+    }
+
+    .articulo-imagen:hover img {
+        transform: scale(1.1);
+    }
+
+    .articulo-info {
+        padding: 15px;
+    }
+
+    .articulo h2 {
+        font-size: 24px;
+        color: #333;
+        margin: 15px 0;
+        font-weight: 700;
+        transition: color 0.3s ease;
+    }
+
+    .articulo p {
+        color: #777;
+        font-size: 16px;
+        margin: 5px 0;
+        line-height: 1.5;
+    }
+
+    .precio {
+        font-size: 20px;
+        color: #e91e63;
+        font-weight: 600;
+        margin: 10px 0;
+    }
+
+    .boton-comprar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /* Espacio entre los íconos */
+            margin-top: 15px;
         }
 
+
+    .boton-comprar i {
+            font-size: 24px; /* Tamaño de los íconos */
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-<header>
-    <div class="logo">
-        <img src="/love/static/productos/images/inloveimag.png" alt="MakeUp Store Logo">
-    </div>
-</div>
-<nav>
-    <a href="{% url 'home' %}">INICIO</a>
-    <a href="{% url 'articulos' %}">PRODUCTOS</a>
-    <a href="{% url 'reseñas' %}">RESEÑAS</a>
-</nav>
-<div class="contact-info">
-    <a href="{% url 'login' %}" class="contact-button">Iniciar Sesión</a>
-    <a href="{% url 'register' %}" class="contact-button">Registrarse</a>
-</div>
-</header>
-
-
-
-<footer>
-    <div class="footer-container">
-        <div class="footer-section">
-            <h3>✨ ¡Estamos aquí para ayudarte a resaltar tu belleza! ✨</h3>
-            <p>📅 <strong>Lunes a Viernes:</strong> 9:00 AM - 7:00 PM<br>
-            🕒 <strong>Sábados:</strong> 10:00 AM - 2:00 PM<br>
-            🚪 <strong>Domingos y festivos:</strong> Cerrado, ¡nos vemos el lunes!</p>
-            <p class="beauty-quote">"La belleza comienza en el momento en que decides ser tú misma."</p>
+    <header>
+        <div class="logo">
+            <img src="{% static 'productos/images/inloveimag.png' %}" alt="MakeUp Store Logo">
         </div>
-        
-        <div class="footer-section">
-            <h3><img src="/love/static/productos/images/inloveimag.png" alt="Logo"></h3>
-            <div class="social-icons">
-                <a href="#"><img src="/love/static/productos/images/faceb.png" alt="Facebook"></a>
-                <a href="#"><img src="/love/static/productos/images/whats.png" alt="WhatsApp"></a>
-                <a href="#"><img src="/love/static/productos/images/insta.png" alt="Instagram"></a>
+        <nav>
+            <a href="{% url 'home' %}">INICIO</a>
+            <a href="{% url 'articulos' %}">PRODUCTOS</a>
+            <a href="{% url 'reseñas' %}">RESEÑAS</a>
+        </nav>
+        <div class="contact-info">
+            <a href="{% url 'login' %}" class="contact-button">Iniciar Sesión</a>
+            <a href="{% url 'register' %}" class="contact-button">Registrarse</a>
+        </div>
+    </header>
+
+    <h1>Artículos Disponibles</h1>
+    {% if messages %}
+    <div class="mensaje-info">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="articulos">
+        {% for producto in productos %}
+        <div class="articulo">
+            <div class="articulo-imagen">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                {% else %}
+                    <img src="{% static 'productos/images/default-articulo.jpg' %}" alt="Imagen por defecto">
+                {% endif %}
+            </div>
+            <div class="articulo-info">
+                <h2>{{ producto.nombre }}</h2>
+                <p>{{ producto.descripcion }}</p>
+                <p class="precio">{{ producto.precio_formateado }}</p>
+                <p>Stock disponible: {{ producto.stock }}</p>
+            </div>
+            <div class="boton-comprar">
+                <a href="#" class="contact-button">
+                    <i class="fas fa-info-circle"></i> <!-- Ícono de detalles -->
+                </a> 
+                <a href="#" class="contact-button" onclick="mostrarMensajeRegistro()">
+                    <i class="fas fa-shopping-cart"></i> <!-- Ícono de agregar al carrito -->
+                </a>
+                           
+               </a>
             </div>
         </div>
-        <div class="footer-section contact-us">
-            <h3>¿✨ Buscas lo mejor en maquillaje y belleza? ✨</h3>
-            <a href="./#" class="btn-contact">¡Descubre nuestros productos más vendidos!</a>
+        {% endfor %}
+    </div>
+
+    <script>
+        var estaAutenticado = "{{ user.is_authenticated|yesno:'true,false' }}";
+    
+        function mostrarMensajeRegistro() {
+            if (estaAutenticado === "true") {
+               alert("¡Debes estar registrado para realizar compras! Por favor, regístrate o inicia sesión.");
+                window.location.href = "{% url 'login' %}";
+            }
+        }
+    </script>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>✨ ¡Estamos aquí para ayudarte a resaltar tu belleza! ✨</h3>
+                <p>📅 <strong>Lunes a Viernes:</strong> 9:00 AM - 7:00 PM<br>
+                    🕒 <strong>Sábados:</strong> 10:00 AM - 2:00 PM<br>
+                    🚪 <strong>Domingos y festivos:</strong> Cerrado, ¡nos vemos el lunes!</p>
+                <p class="beauty-quote">"La belleza comienza en el momento en que decides ser tú misma."</p>
+            </div>
+
+            <div class="footer-section">
+                <h3><img src="{% static 'productos/images/inloveimag.png' %}" alt="Logo"></h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/profile.php?id=100075849161928&mibextid=ZbWKwL"><img src="{% static 'productos/images/faceb.png' %}" alt="Facebook"></a>
+                    <a href="https://wa.me/573053914537"><img src="{% static 'productos/images/whats.png' %}" alt="WhatsApp"></a>
+                    <a href="https://www.instagram.com/inlove.tiendavirtual/profilecard/?igsh=ajg2Mmo3bDl6eDcy"><img src="{% static 'productos/images/insta.png' %}" alt="Instagram"></a>
+                </div>
+            </div>
+            <div class="footer-section contact-us">
+                <h3>¿✨ Buscas lo mejor en maquillaje y belleza? ✨</h3>
+                <a href="#" class="btn-contact">¡Descubre nuestros productos más vendidos!</a>
+            </div>
         </div>
-    </div>
-    <div class="footer-bottom">
-        <p>💄 "La belleza es poder, y el maquillaje es su herramienta". © 2025 MakeUp Store 💄</p>
-        <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
-    </div>
-</footer>
+        <div class="footer-bottom">
+            <p>💄 "La belleza es poder, y el maquillaje es su herramienta". © 2025 MakeUp Store 💄</p>
+            <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+        </div>
+    </footer>
 </body>
 </html>

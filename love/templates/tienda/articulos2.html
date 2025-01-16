@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículos</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'productos/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+/* Estilo general del cuerpo */
+body {
+    font-family: "Poppins", sans-serif; /* Fuente elegante y moderna */
+    margin: 0;
+    padding: 0;
+    background: #ffe4ec; /* Fondo rosa pastel */
+    color: #4a4a68; /* Gris suave */
+}
+
+/* Estilo del título principal */
+h1 {
+    text-align: center;
+    color: #b83280; /* Fucsia moderno */
+    margin: 30px 0;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Contenedor de los artículos */
+.articulos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    margin: 30px 20px;
+    padding: 0 10px;
+}
+
+/* Estilo de cada artículo */
+.articulo {
+    background: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+    text-align: center;
+}
+
+.articulo:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagen del artículo */
+.articulo-imagen img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: transform 0.4s ease, border-radius 0.4s ease;
+}
+
+.articulo-imagen:hover img {
+    transform: scale(1.1);
+    border-radius: 25px; /* Efecto delicado al pasar el ratón */
+}
+
+/* Información del artículo */
+.articulo-info {
+    padding: 15px;
+}
+
+.articulo h2 {
+    font-size: 22px;
+    color: #b83280; /* Fucsia moderno */
+    margin: 15px 0;
+    font-weight: 700;
+}
+
+.articulo p {
+    color: #777;
+    font-size: 16px;
+    margin: 5px 0;
+    line-height: 1.5;
+}
+
+/* Estilo del precio */
+.precio {
+    font-size: 20px;
+    color: #e91e63; /* Rosa vibrante */
+    font-weight: 600;
+    margin: 10px 0;
+}
+
+/* Botón de compra */
+.boton-comprar {
+    margin-top: 15px;
+}
+
+.boton-comprar a {
+    text-decoration: none;
+    color: #ffffff;
+    background: linear-gradient(135deg, #f06292, #e91e63); /* Degradado femenino */
+    padding: 10px 20px;
+    border-radius: 30px; /* Bordes suaves */
+    display: inline-block;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.boton-comprar a:hover {
+    background: linear-gradient(135deg, #ec407a, #d81b60); /* Cambio de degradado */
+    transform: scale(1.05); /* Efecto de agrandamiento */
+}
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 192, 203, 0.5); /* Suave tono rosa translúcido */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff0f6; /* Rosa pastel */
+    padding: 20px;
+    border-radius: 12px; /* Bordes más redondeados */
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-family: 'Arial', sans-serif;
+    border: 2px solid #ff99cc; /* Borde delicado */
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #ff6f91; /* Rosa vibrante */
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ffc0cb; /* Tono rosa suave */
+    border-radius: 8px; /* Bordes más suaves */
+    background: #fff5f8; /* Fondo sutil */
+    color: #333;
+    font-size: 1em;
+    box-shadow: inset 0 2px 4px rgba(255, 182, 193, 0.5);
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: #ff6f91; /* Resaltar borde en foco */
+    box-shadow: 0 0 5px #ff6f91;
+}
+
+.modal-content button {
+    background-color: #ff6f91; /* Botón rosa vibrante */
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 1em;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.modal-content button:hover {
+    background-color: #ff3b6c; /* Más vibrante al pasar el cursor */
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/love/static/productos/images/inloveimag.png" alt="MakeUp Store Logo">
+        </div>
+        <nav>
+            <a href="{% url 'index' %}">INICIO</a>
+            <a href="{% url 'articulos2' %}">PRODUCTOS</a>
+            <a href="{% url 'reseñas' %}">RESEÑAS</a>
+        </nav>
+        <div class="contact-info">
+            <a href="{% url 'profile' %}" class="contact-button">
+                <i class="fas fa-user"></i> <!-- Ícono de usuario -->
+            </a>
+            <a href="{% url 'carrito' %}" class="contact-button">
+                <i class="fas fa-shopping-cart"></i> <!-- Ícono de carrito -->
+                
+               <!-- Icono de Salir -->
+                <a href="#" class="contact-button" onclick="confirmExit()">
+                <i class="fas fa-sign-out-alt"></i> <!-- Ícono de salir -->
+            </a>
+        </div>
+    </header>
+    <script>
+        // Seleccionar el header y aplicar la clase 'shrink' al desplazarse
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('shrink');
+            } else {
+                header.classList.remove('shrink');
+            }
+        });
+
+    </script>
+
+
+ <!-- Mensaje Emergente -->
+    <div id="exit-popup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup()">&times;</span>
+            <h2>¿Te vas, linda?</h2>
+            <p>Si decides cerrar sesión, siempre estaremos aquí para recibirte con una sonrisa cuando vuelvas. 🌸</p>
+            <div class="popup-actions">
+                <button class="popup-button" onclick="exitSession()">Sí, es hora de irme 💕</button>
+                <button class="popup-button" onclick="closePopup()">No, quiero quedarme ✨</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Función para mostrar el popup
+        function confirmExit() {
+            document.getElementById("exit-popup").style.display = "flex";
+        }
+
+        // Función para cerrar el popup
+        function closePopup() {
+            document.getElementById("exit-popup").style.display = "none";
+        }
+
+        // Función para salir
+        function exitSession() {
+            window.location.href = "{% url 'logout' %}";  // Asegúrate de que la URL para el logout sea correcta
+        }
+    </script>
+
+    <h1>Artículos Disponibles</h1>
+    <div class="articulos">
+        {% for producto2 in productos2 %}
+        <div class="articulo">
+            <div class="articulo-imagen">
+                {% if producto2.imagen %}
+                    <img src="{{ producto2.imagen.url }}" alt="{{ producto2.nombre }}">
+                {% else %}
+                    <img src="{% static 'productos/images/default-articulo.jpg' %}" alt="Imagen por defecto">
+                {% endif %}
+            </div>
+            <div class="articulo-info">
+                <h2>{{ producto2.nombre }}</h2>
+                <p>{{ producto2.descripcion }}</p>
+                <p class="precio">{{ producto2.precio_formateado }}</p>
+                <p>Stock disponible: {{ producto2.stock }}</p>
+            </div>
+            <div class="boton-comprar">
+                <a href="#" onclick="mostrarDetalles(
+                    '{{ producto2.nombre|escapejs }}', 
+                    '{{ producto2.descripcion|escapejs }}', 
+                    {{ producto2.precio }}, 
+                    {{ producto2.stock }}
+                )">
+                    Ver Detalles
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="cerrarModal()">&times;</span>
+            <h2 id="modalNombre"></h2>
+            <p id="modalDescripcion"></p>
+            <p><strong>Precio:</strong> $<span id="modalPrecio"></span></p>
+            <p><strong>Stock disponible:</strong> <span id="modalStock"></span></p>
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" min="1" value="1">
+            <button onclick="agregarAlCarrito()">Agregar al Carrito</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>✨ ¡Estamos aquí para ayudarte a resaltar tu belleza! ✨</h3>
+                <p>📅 <strong>Lunes a Viernes:</strong> 9:00 AM - 7:00 PM<br>
+                    🕒 <strong>Sábados:</strong> 10:00 AM - 2:00 PM<br>
+                    🚪 <strong>Domingos y festivos:</strong> Cerrado, ¡nos vemos el lunes!</p>
+                <p class="beauty-quote">"La belleza comienza en el momento en que decides ser tú misma."</p>
+            </div>
+
+            <div class="footer-section">
+                <h3><img src="/love/static/productos/images/inloveimag.png" alt="Logo"></h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/profile.php?id=100075849161928&mibextid=ZbWKwL"><img src="{% static 'productos/images/faceb.png' %}" alt="Facebook"></a>
+                    <a href="https://wa.me/573053914537"><img src="{% static 'productos/images/whats.png' %}" alt="WhatsApp"></a>
+                    <a href="https://www.instagram.com/inlove.tiendavirtual/profilecard/?igsh=ajg2Mmo3bDl6eDcy"><img src="{% static 'productos/images/insta.png' %}" alt="Instagram"></a>
+                </div>
+            </div>
+            <div class="footer-section contact-us">
+                <h3>¿✨ Buscas lo mejor en maquillaje y belleza? ✨</h3>
+                <a href="{% url 'articulos2' %}" class="btn-contact">¡Descubre nuestros productos más vendidos!</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>💄 "La belleza es poder, y el maquillaje es su herramienta". © 2024 MakeUp Store 💄</p>
+            <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+        </div>
+    </footer>
+
+
+    <script>
+        function mostrarDetalles(nombre, descripcion, precio, stock) {
+            document.getElementById('modalNombre').textContent = nombre;
+            document.getElementById('modalDescripcion').textContent = descripcion;
+            document.getElementById('modalPrecio').textContent = precio.toFixed(2);
+            document.getElementById('modalStock').textContent = stock;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function agregarAlCarrito() {
+            const cantidad = document.getElementById('cantidad').value;
+            alert(`Se han agregado ${cantidad} productos al carrito.`);
+            cerrarModal();
+        }
+    </script>
+</body>
+</html>

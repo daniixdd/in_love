@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Tienda de Maquillaje</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'productos/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="{% static 'productos/images/inloveimag.png' %}" alt="MakeUp Store Logo">
+        </div>
+        <nav>
+            <a href="{% url 'index' %}">INICIO</a>
+            <a href="{% url 'articulos2' %}">PRODUCTOS</a>
+            <a href="{% url 'reseña2' %}">RESEÑAS</a>
+        </nav>
+        <div class="contact-info">
+            <a href="{% url 'profile' %}" class="contact-button">
+                <i class="fas fa-user"></i> <!-- Ícono de usuario -->
+            </a>
+            <a href="{% url 'carrito' %}" class="contact-button">
+                <i class="fas fa-shopping-cart"></i> <!-- Ícono de carrito -->
+            </a>
+            <a href="#" class="contact-button" onclick="confirmExit()">
+                <i class="fas fa-sign-out-alt"></i> <!-- Ícono de salir -->
+            </a>
+        </div>
+    </header>
+
+    <!-- Formulario de Edición de Perfil -->
+    <div class="profile-container">
+        <h1>Editar Perfil de {{ user.username }}</h1>
+        <form action="{% url 'profile' %}" method="POST">
+            {% csrf_token %}
+            
+            <!-- Nombre de usuario -->
+            <div class="form-group">
+                <label for="username">Nombre de usuario:</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}" required>
+            </div>
+    
+            <!-- Correo electrónico -->
+            <div class="form-group">
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+    
+            <!-- Botón de guardar cambios -->
+            <button type="submit" class="submit-btn">Guardar Cambios</button>
+        </form>
+          <a href="{% url 'profile' %}" class="cancel-btn">Cancelar</a>
+    </div>
+
+
+    <!-- Popup para confirmar la salida -->
+    <div id="exit-popup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup()">&times;</span>
+            <h2>¿Te vas, linda?</h2>
+            <p>Si decides cerrar sesión, siempre estaremos aquí para recibirte con una sonrisa cuando vuelvas. 🌸</p>
+            <div class="popup-actions">
+                <button class="popup-button" onclick="exitSession()">Sí, es hora de irme 💕</button>
+                <button class="popup-button" onclick="closePopup()">No, quiero quedarme ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para mostrar el popup de salir
+        function confirmExit() {
+            document.getElementById("exit-popup").style.display = "flex";
+        }
+
+        // Función para cerrar el popup de salir
+        function closePopup() {
+            document.getElementById("exit-popup").style.display = "none";
+        }
+
+        // Función para salir
+        function exitSession() {
+            window.location.href = "{% url 'logout' %}";
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #ffeef8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-container {
+            padding: 20px;
+            text-align: center;
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff6fb;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+    color: #d16ba5; /* Color base */
+    font-size: 1.8em; /* Tamaño de fuente reducido */
+    font-family: 'Poppins', sans-serif; /* Fuente con estilo suave */
+    font-weight: 600; /* Peso seminegrita */
+    text-align: center; /* Centrado */
+    text-transform: capitalize; /* Solo la primera letra en mayúscula */
+    letter-spacing: 1px; /* Espaciado ligero entre letras */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 15px; /* Bordes redondeados */
+    background: #fce4ec; /* Fondo suave femenino */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    display: inline-block; /* Ajustar ancho al contenido */
+    margin: 20px auto; /* Espaciado alrededor */
+}
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            text-align: left;
+            font-size: 16px;
+            color: #7a0e75;
+        }
+
+        .form-group input {
+            width: 95%;
+            padding: 9px;
+            margin-top: 5px;
+            border: 1px solid #c577cc;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        /* Estilo general del contenedor */
+.form-container {
+  background-color: #b94a6f; /* Rosa pastel */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Botón de guardar cambios */
+.submit-btn {
+  background-color: #f76c91; /* Rosa vibrante */
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #f04371;
+  transform: scale(1.05);
+}
+
+/* Enlace de cancelar */
+.cancel-btn {
+  display: inline-block;
+  margin-top: 10px;
+  color: #e91e63;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.cancel-btn:hover {
+  color: #d81b60;
+}
+
+
+
+
+    </style>
+        <!-- Footer -->
+        <footer>
+            <div class="footer-container">
+                <div class="footer-section">
+                    <h3>✨ ¡Estamos aquí para ayudarte a resaltar tu belleza! ✨</h3>
+                    <p>📅 <strong>Lunes a Viernes:</strong> 9:00 AM - 7:00 PM<br>
+                        🕒 <strong>Sábados:</strong> 10:00 AM - 2:00 PM<br>
+                        🚪 <strong>Domingos y festivos:</strong> Cerrado, ¡nos vemos el lunes!</p>
+                    <p class="beauty-quote">"La belleza comienza en el momento en que decides ser tú misma."</p>
+                </div>
+    
+                <div class="footer-section">
+                    <h3><img src="{% static 'productos/images/inloveimag.png' %}" alt="Logo"></h3>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/profile.php?id=100075849161928&mibextid=ZbWKwL"><img src="{% static 'productos/images/faceb.png' %}" alt="Facebook"></a>
+                        <a href="https://wa.me/573053914537"><img src="{% static 'productos/images/whats.png' %}" alt="WhatsApp"></a>
+                        <a href="https://www.instagram.com/inlove.tiendavirtual/profilecard/?igsh=ajg2Mmo3bDl6eDcy"><img src="{% static 'productos/images/insta.png' %}" alt="Instagram"></a>
+                    </div>
+                </div>
+                <div class="footer-section contact-us">
+                    <h3>¿✨ Buscas lo mejor en maquillaje y belleza? ✨</h3>
+                    <a href="{% url 'articulos2' %}" class="btn-contact">¡Descubre nuestros productos más vendidos!</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>💄 "La belleza es poder, y el maquillaje es su herramienta". © 2024 MakeUp Store 💄</p>
+                <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+            </div>
+        </footer>
+</body>
+
+</html>

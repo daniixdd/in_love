@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 {% load static %}
+
 <body>
     <!-- Header -->
     <header>
@@ -106,56 +108,57 @@
     </div>
 </section>
 
-    {% load static %} <!-- Cargar la etiqueta de archivos estáticos en Django -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>✨ ¡Estamos aquí para ayudarte a resaltar tu belleza! ✨</h3>
-                <p>📅 <strong>Lunes a Viernes:</strong> 9:00 AM - 7:00 PM<br>
+{% load static %} <!-- Cargar la etiqueta de archivos estáticos en Django -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>✨ ¡Estamos aquí para ayudarte a resaltar tu belleza! ✨</h3>
+            <p>📅 <strong>Lunes a Viernes:</strong> 9:00 AM - 7:00 PM<br>
                 🕒 <strong>Sábados:</strong> 10:00 AM - 2:00 PM<br>
                 🚪 <strong>Domingos y festivos:</strong> Cerrado, ¡nos vemos el lunes!</p>
-                <p class="beauty-quote">"La belleza comienza en el momento en que decides ser tú misma."</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3><img src="/love/static/productos/images/inloveimag.png" alt="Logo"></h3>
-                <div class="social-icons">
-                    <a href="#"><img src="/love/static/productos/images/faceb.png" alt="Facebook"></a>
-                    <a href="#"><img src="/love/static/productos/images/whats.png" alt="WhatsApp"></a>
-                    <a href="#"><img src="/love/static/productos/images/insta.png" alt="Instagram"></a>
-                </div>
-            </div>
-            <div class="footer-section contact-us">
-                <h3>¿✨ Buscas lo mejor en maquillaje y belleza? ✨</h3>
-                <a href="./#" class="btn-contact">¡Descubre nuestros productos más vendidos!</a>
+            <p class="beauty-quote">"La belleza comienza en el momento en que decides ser tú misma."</p>
+        </div>
+
+        <div class="footer-section">
+            <h3><img src="/love/static/productos/images/inloveimag.png" alt="Logo"></h3>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/profile.php?id=100075849161928&mibextid=ZbWKwL"><img src="{% static 'productos/images/faceb.png' %}" alt="Facebook"></a>
+                <a href="https://wa.me/573053914537"><img src="{% static 'productos/images/whats.png' %}" alt="WhatsApp"></a>
+                <a href="https://www.instagram.com/inlove.tiendavirtual/profilecard/?igsh=ajg2Mmo3bDl6eDcy"><img src="{% static 'productos/images/insta.png' %}" alt="Instagram"></a>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>💄 "La belleza es poder, y el maquillaje es su herramienta". © 2025 MakeUp Store 💄</p>
-            <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+        <div class="footer-section contact-us">
+            <h3>¿✨ Buscas lo mejor en maquillaje y belleza? ✨</h3>
+            <a href="./#" class="btn-contact">¡Descubre nuestros productos más vendidos!</a>
         </div>
-    </footer>
-    
+    </div>
+    <div class="footer-bottom">
+        <p>💄 "La belleza es poder, y el maquillaje es su herramienta". © 2025 MakeUp Store 💄</p>
+        <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+    </div>
+</footer>
 
-    <script>
-        function openModal(name, description, price, stock, specifications) {
-            document.getElementById('modal-product-name').textContent = name;
-            document.getElementById('modal-product-description').textContent = description;
-            document.getElementById('modal-product-price').textContent = price;
-            document.getElementById('modal-product-stock').textContent = stock;
-            document.getElementById('modal-product-specifications').textContent = specifications;
-            document.getElementById('productModal').style.display = "block";
-        }
 
-        function closeModal() {
-            document.getElementById('productModal').style.display = "none";
-        }
+<script>
+    function openModal(name, description, price, stock, specifications) {
+        document.getElementById('modal-product-name').textContent = name;
+        document.getElementById('modal-product-description').textContent = description;
+        document.getElementById('modal-product-price').textContent = price;
+        document.getElementById('modal-product-stock').textContent = stock;
+        document.getElementById('modal-product-specifications').textContent = specifications;
+        document.getElementById('productModal').style.display = "block";
+    }
 
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('productModal')) {
-                closeModal();
-            }
+    function closeModal() {
+        document.getElementById('productModal').style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == document.getElementById('productModal')) {
+            closeModal();
         }
-    </script>
+    }
+</script>
 </body>
+
 </html>

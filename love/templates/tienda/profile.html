@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Maquillaje</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'productos/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="{% static 'productos/images/inloveimag.png' %}" alt="MakeUp Store Logo">
+        </div>
+        <nav>
+            <a href="{% url 'index' %}">INICIO</a>
+            <a href="{% url 'articulos2' %}">PRODUCTOS</a>
+            <a href="{% url 'reseña2' %}">RESEÑAS</a>
+        </nav>
+        <div class="contact-info">
+            <!-- Icono de Usuario -->
+            <a href="{% url 'profile' %}" class="contact-button">
+                <i class="fas fa-user"></i> <!-- Ícono de usuario -->
+            </a>
+        
+            <!-- Icono de Carrito de Compras -->
+            <a href="{% url 'carrito' %}" class="contact-button">
+                <i class="fas fa-shopping-cart"></i> <!-- Ícono de carrito -->
+            </a>
+        
+            <!-- Icono de Salir -->
+            <a href="#" class="contact-button" onclick="confirmExit()">
+                <i class="fas fa-sign-out-alt"></i> <!-- Ícono de salir -->
+            </a>
+        </div>
+    </header>
+
+    <!-- Perfil de Usuario -->
+    <div class="profile-container">
+        <h1>¡Bienvenida, {{ user.username }}! 🌸✨ Estamos encantados de tenerte con nosotras. 💖</h1>
+        <div class="profile-info">
+            <div class="profile-details">
+                <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
+                <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
+                <p><strong>Última conexión:</strong> {{ user.last_login }}</p>
+            </div>
+            
+        </div>
+        
+        <!-- Botón para editar perfil -->
+        <a href="#" class="edit-btn" onclick="editProfile()">Editar perfil</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Cerrar sesión</a>
+    </div>
+
+    <!-- Popup para confirmar la salida -->
+    <div id="exit-popup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup()">&times;</span>
+            <h2>¿Te vas, linda?</h2>
+            <p>Si decides cerrar sesión, siempre estaremos aquí para recibirte con una sonrisa cuando vuelvas. 🌸</p>
+            <div class="popup-actions">
+                <button class="popup-button" onclick="exitSession()">Sí, es hora de irme 💕</button>
+                <button class="popup-button" onclick="closePopup()">No, quiero quedarme ✨</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup para confirmar la edición del perfil -->
+    <div id="edit-popup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closeEditPopup()">&times;</span>
+            <h2>¿Seguro que quieres editar tu perfil?</h2>
+            <p>Al hacer clic en "Sí, quiero editar", podrás modificar tus datos.</p>
+            <div class="popup-actions">
+                <!-- Aquí agregamos un botón que redirige a la página de edición -->
+                <form action="{% url 'editprofile' %}" method="get">
+                    <button type="submit" class="popup-button">Sí, quiero editar ✨</button>
+                </form>
+    
+                <!-- Botón para cerrar el popup sin hacer cambios -->
+                <button class="popup-button" onclick="closeEditPopup()">No, quiero quedarme como estoy 💕</button>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        // Función para mostrar el popup de salir
+        function confirmExit() {
+            document.getElementById("exit-popup").style.display = "flex";
+        }
+
+        // Función para cerrar el popup de salir
+        function closePopup() {
+            document.getElementById("exit-popup").style.display = "none";
+        }
+
+        // Función para salir
+        function exitSession() {
+            window.location.href = "{% url 'logout' %}";
+        }
+
+        // Función para mostrar el popup de edición
+        function editProfile() {
+            document.getElementById("edit-popup").style.display = "flex";
+        }
+
+        // Función para cerrar el popup de edición
+        function closeEditPopup() {
+            document.getElementById("edit-popup").style.display = "none";
+        }
+    </script>
+
+<style>
+    body {
+        font-family: "Montserrat", sans-serif; /* Tipografía elegante y moderna */
+        background-color: #f3f2f7; /* Fondo gris claro */
+    }
+
+    .profile-container {
+        padding: 40px;
+        text-align: center;
+        max-width: 600px;
+        margin: 60px auto;
+        background: #ffffff; /* Fondo blanco puro */
+        border-radius: 25px; /* Bordes redondeados pero modernos */
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Sombra elegante */
+        border: 1px solid #e2e1e6; /* Línea minimalista */
+    }
+
+    h1 {
+        color: #8e44ad; /* Púrpura moderno */
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        letter-spacing: 1px; /* Espaciado para modernidad */
+        line-height: 1.4;
+    }
+
+    .profile-info {
+        background-color: #f8f3fc; /* Lavanda sutil */
+        padding: 20px;
+        border-radius: 15px;
+        margin-top: 20px;
+        font-size: 15px;
+        font-weight: 500;
+        color: #4a4a68;
+        border: 1px solid #e8e4f1; /* Detalle moderno */
+    }
+
+    .edit-btn, .logout-btn {
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        margin-top: 20px;
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 25px; /* Bordes redondeados */
+        background: linear-gradient(135deg, #9b59b6, #e056fd); /* Degradado moderno */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+    .edit-btn:hover, .logout-btn:hover {
+        transform: translateY(-3px); /* Efecto flotante al pasar el ratón */
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Mayor profundidad */
+        background: linear-gradient(135deg, #c44aa5, #a81ad3); /* Cambio de degradado */
+    }
+</style>
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>✨ ¡Estamos aquí para ayudarte a resaltar tu belleza! ✨</h3>
+                <p>📅 <strong>Lunes a Viernes:</strong> 9:00 AM - 7:00 PM<br>
+                    🕒 <strong>Sábados:</strong> 10:00 AM - 2:00 PM<br>
+                    🚪 <strong>Domingos y festivos:</strong> Cerrado, ¡nos vemos el lunes!</p>
+                <p class="beauty-quote">"La belleza comienza en el momento en que decides ser tú misma."</p>
+            </div>
+
+            <div class="footer-section">
+                <h3><img src="{% static 'productos/images/inloveimag.png' %}" alt="Logo"></h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/profile.php?id=100075849161928&mibextid=ZbWKwL"><img src="{% static 'productos/images/faceb.png' %}" alt="Facebook"></a>
+                    <a href="https://wa.me/573053914537"><img src="{% static 'productos/images/whats.png' %}" alt="WhatsApp"></a>
+                    <a href="https://www.instagram.com/inlove.tiendavirtual/profilecard/?igsh=ajg2Mmo3bDl6eDcy"><img src="{% static 'productos/images/insta.png' %}" alt="Instagram"></a>
+                </div>
+            </div>
+            <div class="footer-section contact-us">
+                <h3>¿✨ Buscas lo mejor en maquillaje y belleza? ✨</h3>
+                <a href="{% url 'articulos2' %}" class="btn-contact">¡Descubre nuestros productos más vendidos!</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>💄 "La belleza es poder, y el maquillaje es su herramienta". © 2024 MakeUp Store 💄</p>
+            <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
+        </div>
+    </footer>
+</body>
+
+</html>

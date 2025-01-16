@@ -99,55 +99,82 @@
     </style>
   </head>
   <body>
+    <!-- Header -->
     <header>
-      <div class="logo">
-        <img
-          src="/love/static/productos/images/inloveimag.png"
-          alt="MakeUp Store Logo"
-        />
-        <
-      </div>
-      <nav>
-        <a href="{% url 'home' %}">INICIO</a>
-        <a href="{% url 'articulos' %}">PRODUCTOS</a>
-        <a href="{% url 'reseñas' %}">RESEÑAS</a>
-      </nav>
-      <div class="contact-info">
-        <a href="{% url 'login' %}" class="contact-button">Iniciar Sesión</a>
-        <a href="{% url 'register' %}" class="contact-button">Registrarse</a>
-      </div>
+        <div class="logo">
+            <img src="/love/static/productos/images/inloveimag.png" alt="MakeUp Store Logo">
+        </div>
+        <nav>
+            <a href="{% url 'index' %}">INICIO</a>
+            <a href="{% url 'articulos2' %}">PRODUCTOS</a>
+            <a href="{% url 'reseña2' %}">RESEÑAS</a>
+        </nav>
+        <div class="contact-info">
+            <!-- Icono de Usuario -->
+            <a href="{% url 'profile' %}" class="contact-button">
+                <i class="fas fa-user"></i>
+            </a>
+
+            <!-- Icono de Carrito de Compras -->
+            <a href="{% url 'carrito' %}" class="contact-button">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            
+            <!-- Icono de Salir -->
+            <a href="#" class="contact-button" onclick="confirmExit()">
+                <i class="fas fa-sign-out-alt"></i> <!-- Ícono de salir -->
+            </a>
+        </div>
     </header>
 
-    <main>
-      <div class="reseñas-section">
-        <h2>🌸 Opiniones sobre nuestra tienda 🌸</h2>
-        <div class="reseñas-list">
-          <div class="reseña">
-            <h3><i class="fas fa-heart"></i> Ana González</h3>
-            <p>
-              "¡Los productos son fantásticos! Me siento radiante y hermosa. 🥰"
-            </p>
-          </div>
-          <div class="reseña">
-            <h3><i class="fas fa-heart"></i> Laura Martínez</h3>
-            <p>
-              "El servicio es impecable. ¡Gracias por hacerme sentir especial!
-              💄"
-            </p>
-          </div>
+    <!-- Mensaje Emergente para Salir -->
+    <div id="exit-popup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup()">&times;</span>
+            <h2>¿Te vas, linda?</h2>
+            <p>Si decides cerrar sesión, siempre estaremos aquí para recibirte con una sonrisa cuando vuelvas. 🌸</p>
+            <div class="popup-actions">
+                <button class="popup-button" onclick="exitSession()">Sí, es hora de irme 💕</button>
+                <button class="popup-button" onclick="closePopup()">No, quiero quedarme ✨</button>
+            </div>
         </div>
-        <form class="add-reseña-form">
-          <input type="text" name="nombre" placeholder="Tu nombre" required />
-          <textarea
-            name="reseña"
-            rows="4"
-            placeholder="Escribe tu opinión aquí..."
-            required
-          ></textarea>
-          <button type="submit">Enviar Opinión</button>
-        </form>
+    </div>
+
+    <script>
+        // Función para mostrar el popup
+        function confirmExit() {
+            document.getElementById("exit-popup").style.display = "flex";
+        }
+
+        // Función para cerrar el popup
+        function closePopup() {
+            document.getElementById("exit-popup").style.display = "none";
+        }
+
+        // Función para salir
+        function exitSession() {
+            window.location.href = "/logout";  // Redirige al destino adecuado para el cierre de sesión
+        }
+    </script>
+
+<main>
+  <div class="reseñas-section">
+      <h2>🌸 Opiniones sobre nuestra tienda 🌸</h2>
+      <div class="reseñas-list">
+          {% for reseña in reseñas %}
+              <div class="reseña">
+                  <h3><i class="fas fa-heart"></i> {{ reseña.nombre }}</h3>
+                  <p>"{{ reseña.reseña }}"</p>
+              </div>
+          {% endfor %}
       </div>
-    </main>
+      <form method="POST" class="add-reseña-form">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Enviar Opinión</button>
+      </form>
+  </div>
+</main>
 
     <footer>
       <div class="footer-container">
@@ -172,10 +199,21 @@
             />
           </h3>
           <div class="social-icons">
-            <a href="https://www.facebook.com/profile.php?id=100075849161928&mibextid=ZbWKwL"><img src="{% static 'productos/images/faceb.png' %}" alt="Facebook"></a>
-            <a href="https://wa.me/573053914537"><img src="{% static 'productos/images/whats.png' %}" alt="WhatsApp"></a>
-            <a href="https://www.instagram.com/inlove.tiendavirtual/profilecard/?igsh=ajg2Mmo3bDl6eDcy"><img src="{% static 'productos/images/insta.png' %}" alt="Instagram"></a>
-        </div>
+            <a href="#"
+              ><img
+                src="/love/static/productos/images/faceb.png"
+                alt="Facebook"
+            /></a>
+            <a href="#"
+              ><img
+                src="/love/static/productos/images/whats.png"
+                alt="WhatsApp"
+            /></a>
+            <a href="#"
+              ><img
+                src="/love/static/productos/images/insta.png"
+                alt="Instagram"
+            /></a>
           </div>
         </div>
         <div class="footer-section contact-us">
