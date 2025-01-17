@@ -673,3 +673,24 @@ footer {
 .popup-close:hover {
   color: #f55a81; /* Rosado más oscuro */
 }
+
+.contact-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cart-notification {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #FF69B4; /* Color rosa suave */
+  color: white;
+  border-radius: 50%;
+  padding: 4px 8px; /* Ajustar tamaño para que sea más discreto */
+  font-size: 14px; /* Tamaño de fuente un poco más grande */
+  font-weight: 600; /* Peso de fuente más ligero */
+  font-family: 'Verdana', sans-serif; /* Tipografía más suave */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra sutil para darle profundidad */
+}
+

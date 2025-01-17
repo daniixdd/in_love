@@ -11,112 +11,108 @@
 </head>
 {% load static %}
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #fff5fa;
-        margin: 0;
-        padding: 0;
-    }
+ /* Estilo general del carrito */
+ body {
+      font-family: "Poppins", sans-serif;
+      background-color: #fafafa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+  }
 
-    .container {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-start;
-        padding: 20px;
-    }
+  .carrito-header {
+      background-color: #e91e63;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+  }
 
-    .product-images {
-        flex: 1;
-        margin-right: 20px;
-    }
+  /* Contenedor del carrito */
+  .carrito-contenedor {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+  }
 
-    .product-images img {
-        width: 100%;
-        max-width: 300px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-    }
+  .producto {
+      background-color: #ffffff;
+      width: 80%;
+      margin: 10px 0;
+      border-radius: 8px;
+      display: flex;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
 
-    .product-details {
-        flex: 2;
-        background-color: #fff;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+  .producto-imagen {
+      width: 100px;
+      height: 100px;
+      margin-right: 20px;
+  }
 
-    .product-details h1 {
-        font-size: 24px;
-        color: #333;
-    }
+  .producto-imagen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+  }
 
-    .product-ref {
-        color: #d81b60;
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
+  .producto-info {
+      flex-grow: 1;
+  }
 
-    .price {
-        font-size: 22px;
-        color: #e91e63;
-        margin: 15px 0;
-    }
+  .producto-info h2 {
+      font-size: 18px;
+      color: #333;
+  }
 
-    .quantity {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        background-color: #f9f9f9;
-        width: 150px;
-    }
+  .producto-info p {
+      font-size: 14px;
+      color: #666;
+  }
 
-    .quantity button {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        padding: 10px;
-        font-size: 18px;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: background-color 0.3s ease;
-        width: 40px;
-    }
+  .producto-info .precio {
+      color: #e91e63;
+      font-weight: bold;
+  }
 
-    .quantity button:hover {
-        background-color: #45a049;
-    }
+  .producto-info .cantidad {
+      margin-top: 10px;
+  }
 
-    .quantity input {
-        width: 50px;
-        text-align: center;
-        font-size: 18px;
-        border: none;
-        outline: none;
-        background-color: transparent;
-        font-family: Arial, sans-serif;
-    }
+  /* Botón de eliminar */
+  .producto-info .eliminar {
+      color: #e91e63;
+      font-size: 20px;
+      cursor: pointer;
+  }
 
-    .quantity input:focus {
-        border-bottom: 2px solid #4CAF50;
-    }
+  /* Botón para finalizar la compra */
+  .finalizar-compra {
+      background-color: #e91e63;
+      color: white;
+      font-size: 20px;
+      padding: 15px 30px;
+      border-radius: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+  }
 
-    .add-to-cart {
-        background-color: #e91e63;
-        color: #fff;
-        padding: 12px 25px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
+  .finalizar-compra:hover {
+      background-color: #d81b60;
+  }
 
-    .add-to-cart:hover {
-        background-color: #d81b60;
-    }
+  .total-compra {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
+  }
+</style>
 </style>
 
 <body>
@@ -178,43 +174,95 @@
             window.location.href = "/logout";  // Redirige al destino adecuado para el cierre de sesión
         }
     </script>
+  
+</head>
+<body>
 
-    <div class="container">
-        <div class="product-images">
-            <img src="{% static 'images/product_main.png' %}" alt="Producto Principal">
-            <div class="product-images-thumbnail">
-                <img src="{% static 'images/product_thumb1.png' %}" alt="Miniatura 1">
-                <img src="{% static 'images/product_thumb2.png' %}" alt="Miniatura 2">
-                <img src="{% static 'images/product_thumb3.png' %}" alt="Miniatura 3">
-            </div>
+<!-- Header -->
+<header class="carrito-header">
+  <h1>Carrito de Compras</h1>
+</header>
+       
+<!-- Contenedor del carrito -->
+<div class="carrito-contenedor">
+  {% if productos2 %}
+    {% for producto2 in productos2 %}
+      <div class="producto">
+        <div class="producto-imagen">
+          {% if producto2.imagen %}
+            <img src="{{ producto2.imagen.url }}" alt="{{ producto2.nombre }}">
+          {% else %}
+            <img src="{% static 'productos/images/default-articulo.jpg' %}" alt="Imagen por defecto">
+          {% endif %}
         </div>
-        <div class="product-details">
-            <h1>{{ producto2.nombre }}</h1>
-            <p class="product-ref">Ref:{{ producto2.descripcion }}</p>
-            <p class="precio">$ {{ producto2.precio_formateado }}</p>
-
-            <div class="quantity">
-                <button class="decrease">-</button>
-                <input type="number" value="1" min="1" id="quantity-input">
-                <button class="increase">+</button>
-            </div>
-
-            <button class="add-to-cart">Añadir al carrito</button>
-            <p class="availability">{{ product.availability }}</p>
-
-            <div class="details">
-                <h2>Detalles del producto</h2>
-                <ul>
-                    {% for detail in product.details %}
-                    <li>{{ detail }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+        <div class="producto-info">
+          <h2>{{ producto2.nombre }}</h2>
+          <p>{{ producto2.descripcion }}</p>
+          <p class="precio">{{ producto2.precio_formateado }}</p>
+          <div class="cantidad">
+            <span>Cantidad: </span>
+            <!-- Corregimos el ID de producto para que coincida con producto2 -->
+            <input 
+              type="number" 
+              value="{{ producto2.stock }}" 
+              min="1" 
+              onchange="actualizarCantidad({{ producto2.id }}, this.value)">
+          </div>
+          <!-- Corregimos el ID de producto para que coincida con producto2 -->
+          <span class="eliminar" onclick="eliminarDelCarrito({{ producto2.id }})">Eliminar</span>
         </div>
-    </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No tienes productos en el carrito.</p>
+  {% endif %}
 
-   
-</body>
+  <div class="total-compra">
+    <p>Total: ${{ total_compra }}</p>
+  </div>
+
+  <div class="finalizar-compra">
+    <a href="#" style="color: white; text-decoration: none;">Finalizar Compra</a>
+  </div>
+</div>
+
+
+<!-- Scripts -->
+<script>
+  // Función para actualizar la cantidad del producto
+  function actualizarCantidad(productoId, cantidad) {
+      // Llamada AJAX para actualizar la cantidad
+      fetch(`/actualizar_carrito/${productoId}/`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify({ cantidad: cantidad })
+      }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Recargar la página para reflejar los cambios
+            }
+        });
+  }
+
+  // Función para eliminar un producto del carrito
+  function eliminarDelCarrito(productoId) {
+      fetch(`/eliminar_del_carrito/${productoId}/`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}'
+          }
+      }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Recargar la página para reflejar los cambios
+            }
+        });
+  }
+</script>
 <br>
 <br>
 
@@ -248,28 +296,6 @@
         <p>Con amor y estilo | <a href="#">Política de Privacidad</a> | <a href="#">Términos y Condiciones</a></p>
     </div>
 </footer>
-
-
-<script>
-    function openModal(name, description, price, stock, specifications) {
-        document.getElementById('modal-product-name').textContent = name;
-        document.getElementById('modal-product-description').textContent = description;
-        document.getElementById('modal-product-price').textContent = price;
-        document.getElementById('modal-product-stock').textContent = stock;
-        document.getElementById('modal-product-specifications').textContent = specifications;
-        document.getElementById('productModal').style.display = "block";
-    }
-
-    function closeModal() {
-        document.getElementById('productModal').style.display = "none";
-    }
-
-    window.onclick = function (event) {
-        if (event.target == document.getElementById('productModal')) {
-            closeModal();
-        }
-    }
-</script>
 </body>
 
 </html>
