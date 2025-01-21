@@ -217,21 +217,6 @@ input[type="number"] {
     .message.error {
       color: red;
        }
-
-    .cart-notification {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #FF69B4; /* Color rosa suave */
-    color: white;
-    border-radius: 50%;
-    padding: 4px 8px; /* Ajustar tamaño para que sea más discreto */
-    font-size: 14px; /* Tamaño de fuente un poco más grande */
-    font-weight: 600; /* Peso de fuente más ligero */
-    font-family: 'Verdana', sans-serif; /* Tipografía más suave */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra sutil para darle profundidad */
-
-}
     </style>
 </head>
 <body>
@@ -250,7 +235,6 @@ input[type="number"] {
             </a>
             <a href="{% url 'carrito' %}" class="contact-button">
                 <i class="fas fa-shopping-cart"></i> <!-- Ícono de carrito -->
-                <span id="cart-notification" class="cart-notification">0</span> <!-- Notificación de productos -->
             </a>
                 
                <!-- Icono de Salir -->
@@ -345,6 +329,7 @@ input[type="number"] {
           <p class="message" id="mensajeConfirmacion"></p>
         </div>
       </div>
+      
 
     <!-- Footer -->
     <footer>
@@ -378,69 +363,99 @@ input[type="number"] {
 
 
   
-<script>
-let productosEnCarrito = 0;
-
-function agregarAlCarrito() {
-    const cantidad = parseInt(document.getElementById('cantidad').value, 10);
-    
-    // Verificar si la cantidad es válida
-    if (!isNaN(cantidad) && cantidad > 0) {
-        productosEnCarrito += cantidad; // Aumentar la cantidad de productos en el carrito
-        actualizarNotificacionCarrito(); // Actualizar la notificación en el carrito
-    } else {
-        alert("Por favor, ingrese una cantidad válida.");
-    }
-}
-
-function actualizarNotificacionCarrito() {
-    const notificacion = document.getElementById('cart-notification');
-    notificacion.textContent = productosEnCarrito > 0 ? productosEnCarrito : ''; // Mostrar solo si hay productos en el carrito
-}
-
-
-
-    // Datos del producto (puedes reemplazarlos por los reales)
-    let stockDisponible = 5;
-  
-    // Función para cerrar el modal
-    function cerrarModal() {
-      document.getElementById("modal").style.display = "none";
-      document.getElementById("mensajeConfirmacion").style.display = "none";
-    }
-    // Función para abrir el modal (puedes llamarla con datos dinámicos)
-    function abrirModal(nombre, descripcion, precio, stock) {
-      document.getElementById("modal").style.display = "block";
-      document.getElementById("modalNombre").textContent = nombre;
-      document.getElementById("modalDescripcion").textContent = descripcion;
-      document.getElementById("modalPrecio").textContent = precio.toFixed(2);;
-      document.getElementById("modalStock").textContent = stock;
-      stockDisponible = stock; // Actualizamos el stock
-    }
-    // Función para agregar al carrito
-    function agregarAlCarrito() {
-      const cantidad = parseInt(document.getElementById("cantidad").value);
-      const mensaje = document.getElementById("mensajeConfirmacion");
-  
-      if (cantidad > stockDisponible) {
-        mensaje.textContent = "No hay suficiente stock disponible.";
-        mensaje.classList.add("error");
-        mensaje.style.display = "block";
-      } else {
-        mensaje.textContent = "Producto agregado al carrito.";
-        mensaje.classList.remove("error");
-        mensaje.style.display = "block";
-  
-        // Reducir el stock
-        stockDisponible -= cantidad;
-        document.getElementById("modalStock").textContent = stockDisponible;
-  
-        // Restablecer el campo de cantidad
-        document.getElementById("cantidad").value = 1;
-      }
-    }
-  
-  
-  </script>
+    <script>
+        let productosEnCarrito = 0;
+        let stockDisponible = 5; // Establecer el stock inicial del producto
+        
+        // Función para obtener el token CSRF
+        function getCSRFToken() {
+            return document.querySelector('[name=csrf-token]').content;
+        }
+        
+        // Función para abrir el modal con los detalles del producto
+        function abrirModal(nombre, descripcion, precio, stock) {
+            document.getElementById("modal").style.display = "block";
+            document.getElementById("modalNombre").textContent = nombre;
+            document.getElementById("modalDescripcion").textContent = descripcion;
+            document.getElementById("modalPrecio").textContent = precio.toFixed(2);
+            document.getElementById("modalStock").textContent = stock;
+        
+            stockDisponible = stock; // Actualizamos el stock disponible
+        }
+        
+        // Función para agregar al carrito
+        function agregarAlCarrito() {
+            const cantidad = parseInt(document.getElementById("cantidad").value);
+            const mensaje = document.getElementById("mensajeConfirmacion");
+        
+            // Verificar si la cantidad es válida
+            if (cantidad > stockDisponible) {
+                mensaje.textContent = "No hay suficiente stock disponible.";
+                mensaje.classList.add("error");
+                mensaje.style.display = "block";
+            } else if (cantidad <= 0 || isNaN(cantidad)) {
+                mensaje.textContent = "Por favor, ingrese una cantidad válida.";
+                mensaje.classList.add("error");
+                mensaje.style.display = "block";
+            } else {
+                // Actualizamos el mensaje de confirmación
+                mensaje.textContent = "Producto agregado al carrito.";
+                mensaje.classList.remove("error");
+                mensaje.style.display = "block";
+        
+                // Reducir el stock disponible
+                stockDisponible -= cantidad;
+                document.getElementById("modalStock").textContent = stockDisponible;
+        
+                // Restablecer el campo de cantidad
+                document.getElementById("cantidad").value = 1;
+        
+                // Actualizamos la notificación del carrito
+                productosEnCarrito += cantidad;
+                actualizarNotificacionCarrito();
+        
+                // Enviar la información al carrito a través de una solicitud POST
+                fetch('/carrito/agregar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()  // Incluir el token CSRF
+                    },
+                    body: JSON.stringify({
+                        nombre: document.getElementById("modalNombre").textContent,
+                        descripcion: document.getElementById("modalDescripcion").textContent,
+                        precio: parseFloat(document.getElementById("modalPrecio").textContent),
+                        cantidad: cantidad
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Redirigir al carrito
+                        window.location.href = '/carrito/';
+                    } else {
+                        alert('Hubo un problema al agregar el producto al carrito.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al agregar al carrito:', error);
+                    alert('Ocurrió un error al agregar el producto al carrito');
+                });
+            }
+        }
+        
+        // Función para actualizar la notificación del carrito
+        function actualizarNotificacionCarrito() {
+            const notificacion = document.getElementById('cart-notification');
+            notificacion.textContent = productosEnCarrito > 0 ? productosEnCarrito : ''; // Mostrar solo si hay productos en el carrito
+        }
+        
+        // Función para cerrar el modal
+        function cerrarModal() {
+            document.getElementById("modal").style.display = "none";
+            document.getElementById("mensajeConfirmacion").style.display = "none";
+        }
+        </script>
+        
 </body>
 </html>

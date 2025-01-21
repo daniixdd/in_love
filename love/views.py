@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -6,9 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import login
-from django.shortcuts import render, redirect
 from .models import Articulos
-from .models import Articulos, ItemCarrito
 from django.shortcuts import render, redirect
 from .models import Reseña2
 from .forms import ReseñaForm
@@ -16,8 +13,35 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from .models import Profile  # Asegúrate de importar tu modelo Profile
+from .models import Profile  
 from .forms import UserProfileForm  
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+
+def reseña2(request):
+    if request.method == 'POST':
+        form = ReseñaForm(request.POST)
+        if form.is_valid():
+            reseña = form.save(commit=False)  # No guardamos aún
+            reseña.usuario = request.user  # Asignamos el usuario que está logueado
+            reseña.nombre = request.user.username  # Usamos el nombre del usuario automáticamente
+            reseña.save()  # Guardamos la reseña
+            return redirect('reseña2')  # Redirigimos para que no se repita el envío
+    else:
+        form = ReseñaForm()
+
+    # Obtenemos todas las reseñas para mostrarlas
+    todas_reseñas = Reseña2.objects.all().order_by('-fecha')
+
+    return render(request, 'tienda/reseña2.html', {
+        'form': form,
+        'reseñas': todas_reseñas,
+    })
+
+
+from django.http import JsonResponse
 
 @login_required
 def profile(request):
@@ -79,9 +103,76 @@ def index(request):
     productos = Articulos.objects.all()  # Puedes mostrar los productos en la página de inicio
     return render(request, 'tienda/index.html', {'productos': productos})
 
+
 def carrito(request):
-    productos = Articulos.objects.all()  # Puedes mostrar los productos en la página de inicio
-    return render(request, 'tienda/carrito.html', {'productos': productos})
+    if request.method == 'POST':
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        stock = request.POST.get('stock')
+
+        # Manejo del carrito en la sesión
+        carrito = request.session.get('carrito', [])
+        carrito.append({
+            'nombre': nombre,
+            'descripcion': descripcion,
+            'precio': float(precio),
+            'stock': int(stock),
+        })
+        request.session['carrito'] = carrito
+
+        return redirect('ver_carrito')
+
+    carrito = request.session.get('carrito', [])
+    return render(request, 'tienda/carrito.html', {'carrito': carrito})
+
+
+
+# Simulamos un carrito en la sesión
+def agregar_al_carrito(request, producto_id):
+    carrito = request.session.get('carrito', {})
+
+    if producto_id in carrito:
+        carrito[producto_id] += 1
+    else:
+        carrito[producto_id] = 1
+
+    request.session['carrito'] = carrito
+    return HttpResponse("Producto agregado al carrito")
+
+
+def ver_carrito(request):
+    # Recuperar el carrito de la sesión
+    carrito = request.session.get('carrito', [])
+    
+    # Obtener los productos de la base de datos basados en los IDs guardados en el carrito
+    productos2 = []
+    for item in carrito:
+        producto = producto.objects.get(id=item['id'])  # Obtener el producto por ID
+        productos2.append(producto)
+    
+    # Calcular el total del carrito
+    total_carrito = sum(item['precio'] for item in carrito)
+
+    # Preparar el contexto
+    context = {
+        'productos2': productos2,  # Pasar los productos a la plantilla
+        'total_carrito_formateado': f"${total_carrito:,.2f}"
+    }
+
+    # Renderizar la página con los productos
+    return render(request, 'tienda/carrito.html', context)
+
+
+def finalizar_compra(request):
+    # Aquí puedes agregar la lógica para procesar el pago, enviar un correo, etc.
+    carrito = request.session.get("carrito", [])
+
+    if carrito:
+        # Vaciar el carrito después de la compra
+        request.session['carrito'] = []
+
+    return render(request, 'tienda/compra_confirmada.html')
 
 def articulos(request):
     productos_disponibles = Articulos.objects.filter(stock__gt=0)  # Solo artículos con stock disponible

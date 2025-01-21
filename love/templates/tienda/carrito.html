@@ -11,108 +11,46 @@
 </head>
 {% load static %}
 <style>
- /* Estilo general del carrito */
- body {
-      font-family: "Poppins", sans-serif;
-      background-color: #fafafa;
-      color: #333;
-      margin: 0;
-      padding: 0;
-  }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #fff5fa;
+        margin: 0;
+        padding: 0;
+    }
+    .carrito {
+            padding: 20px;
+        }
 
-  .carrito-header {
-      background-color: #e91e63;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 30px;
-      font-weight: bold;
-  }
+        .carrito ul {
+            list-style-type: none;
+            padding: 0;
+        }
 
-  /* Contenedor del carrito */
-  .carrito-contenedor {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-  }
+        .carrito li {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 10px;
+        }
 
-  .producto {
-      background-color: #ffffff;
-      width: 80%;
-      margin: 10px 0;
-      border-radius: 8px;
-      display: flex;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
+        .boton-compra {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
 
-  .producto-imagen {
-      width: 100px;
-      height: 100px;
-      margin-right: 20px;
-  }
+        .boton-compra:hover {
+            background-color: #0056b3;
+        }
 
-  .producto-imagen img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
-  }
+        .mensaje-error {
+            color: #ff4d4f;
+            font-weight: bold;
+            margin-top: 10px;
+        }
 
-  .producto-info {
-      flex-grow: 1;
-  }
-
-  .producto-info h2 {
-      font-size: 18px;
-      color: #333;
-  }
-
-  .producto-info p {
-      font-size: 14px;
-      color: #666;
-  }
-
-  .producto-info .precio {
-      color: #e91e63;
-      font-weight: bold;
-  }
-
-  .producto-info .cantidad {
-      margin-top: 10px;
-  }
-
-  /* Botón de eliminar */
-  .producto-info .eliminar {
-      color: #e91e63;
-      font-size: 20px;
-      cursor: pointer;
-  }
-
-  /* Botón para finalizar la compra */
-  .finalizar-compra {
-      background-color: #e91e63;
-      color: white;
-      font-size: 20px;
-      padding: 15px 30px;
-      border-radius: 30px;
-      text-align: center;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      margin-top: 20px;
-  }
-
-  .finalizar-compra:hover {
-      background-color: #d81b60;
-  }
-
-  .total-compra {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #333;
-  }
-</style>
 </style>
 
 <body>
@@ -143,8 +81,6 @@
         </div>
     </div>
     </header>
-
-
     <!-- Mensaje Emergente para Salir -->
     <div id="exit-popup" class="popup">
         <div class="popup-content">
@@ -174,99 +110,36 @@
             window.location.href = "/logout";  // Redirige al destino adecuado para el cierre de sesión
         }
     </script>
-  
-</head>
-<body>
-
-<!-- Header -->
-<header class="carrito-header">
-  <h1>Carrito de Compras</h1>
-</header>
-       
-<!-- Contenedor del carrito -->
-<div class="carrito-contenedor">
-  {% if productos2 %}
-    {% for producto2 in productos2 %}
-      <div class="producto">
-        <div class="producto-imagen">
-          {% if producto2.imagen %}
-            <img src="{{ producto2.imagen.url }}" alt="{{ producto2.nombre }}">
-          {% else %}
-            <img src="{% static 'productos/images/default-articulo.jpg' %}" alt="Imagen por defecto">
-          {% endif %}
-        </div>
-        <div class="producto-info">
-          <h2>{{ producto2.nombre }}</h2>
-          <p>{{ producto2.descripcion }}</p>
-          <p class="precio">{{ producto2.precio_formateado }}</p>
-          <div class="cantidad">
-            <span>Cantidad: </span>
-            <!-- Corregimos el ID de producto para que coincida con producto2 -->
-            <input 
-              type="number" 
-              value="{{ producto2.stock }}" 
-              min="1" 
-              onchange="actualizarCantidad({{ producto2.id }}, this.value)">
-          </div>
-          <!-- Corregimos el ID de producto para que coincida con producto2 -->
-          <span class="eliminar" onclick="eliminarDelCarrito({{ producto2.id }})">Eliminar</span>
-        </div>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>No tienes productos en el carrito.</p>
-  {% endif %}
-
-  <div class="total-compra">
-    <p>Total: ${{ total_compra }}</p>
-  </div>
-
-  <div class="finalizar-compra">
-    <a href="#" style="color: white; text-decoration: none;">Finalizar Compra</a>
-  </div>
-</div>
-
-
-<!-- Scripts -->
-<script>
-  // Función para actualizar la cantidad del producto
-  function actualizarCantidad(productoId, cantidad) {
-      // Llamada AJAX para actualizar la cantidad
-      fetch(`/actualizar_carrito/${productoId}/`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': '{{ csrf_token }}'
-          },
-          body: JSON.stringify({ cantidad: cantidad })
-      }).then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload(); // Recargar la página para reflejar los cambios
-            }
-        });
-  }
-
-  // Función para eliminar un producto del carrito
-  function eliminarDelCarrito(productoId) {
-      fetch(`/eliminar_del_carrito/${productoId}/`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': '{{ csrf_token }}'
-          }
-      }).then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload(); // Recargar la página para reflejar los cambios
-            }
-        });
-  }
-</script>
-<br>
-<br>
-
-
+ 
+ <h1>Carrito de Compras</h1>
+ <div class="articulos">
+     {% for producto2 in productos2 %}
+     <div class="articulo">
+         <div class="articulo-imagen">
+             {% if producto2.imagen %}
+                 <img src="{{ producto2.imagen.url }}" alt="{{ producto2.nombre }}">
+             {% else %}
+                 <img src="{% static 'productos/images/default-articulo.jpg' %}" alt="Imagen por defecto">
+             {% endif %}
+         </div>
+         <div class="articulo-info">
+             <h2>{{ producto2.nombre }}</h2>
+             <p>{{ producto2.descripcion }}</p>
+             <p class="precio">${{ producto2.precio }}</p>
+             <p>Cantidad: 1</p> <!-- Aquí podrías incluir la cantidad real si lo deseas -->
+         </div>
+     </div>
+     {% endfor %}
+ </div>
+ 
+ <div class="total-carrito">
+     <p><strong>Total: </strong>{{ total_carrito_formateado }}</p>
+ </div>
+ 
+ <div class="acciones">
+     <a href="{% url 'index' %}" class="boton-comprar">Volver al Inicio</a>
+ </div>
+ 
 {% load static %} <!-- Cargar la etiqueta de archivos estáticos en Django -->
 <footer>
     <div class="footer-container">

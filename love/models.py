@@ -23,12 +23,6 @@ class Articulos(models.Model):
     def __str__(self):
         return self.nombre
 
-class ItemCarrito(models.Model):
-    articulo = models.ForeignKey(Articulos, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.cantidad} x {self.articulo.nombre}"
 
 class Articulos2(models.Model):
     nombre = models.CharField(max_length=255)

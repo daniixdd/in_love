@@ -18,6 +18,9 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='login.html'), name='login'),
     path('reseña2/', views.reseña2, name='reseña2'),
     path('editprofile/', views.editprofile, name='editprofile'),
+    path("carrito/", views.ver_carrito, name="ver_carrito"),
+     path('agregar_al_carrito/<int:producto_id>/', views.agregar_al_carrito, name='agregar_al_carrito'),
+  
 ]
 # Agrega las rutas estáticas al final, si está en modo DEBUG
 if settings.DEBUG:
